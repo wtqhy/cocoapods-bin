@@ -147,7 +147,7 @@ module CBin
       end
 
       def ios_architectures
-        archs = %w[x86_64 arm64 armv7 armv7s i386]
+        archs = %w[x86_64 arm64]
         @vendored_libraries.each do |library|
           archs = `lipo -info #{library}`.split & archs
         end
