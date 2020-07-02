@@ -26,7 +26,7 @@ module CBin
 
           if answer == '' && !pre_answer.nil?
             answer = pre_answer
-            print answer.yellow
+            print answer
             print "\n"
           end
 

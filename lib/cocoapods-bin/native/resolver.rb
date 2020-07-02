@@ -121,14 +121,15 @@ module Pod
 
             # 采用二进制依赖并且不为开发组件
             use_binary = use_binary_rspecs.include?(rspec)
-            source = use_binary ? sources_manager.binary_source : sources_manager.code_source
+            sources = use_binary ? sources_manager.binary_source : sources_manager.code_source
 
             spec_version = rspec.spec.version
 
             UI.message "- 开始处理 #{rspec.spec.name} #{spec_version} 组件."
 
             begin
-              # 从新 source 中获取 spec
+              for source in sources do
+                # 从新 source 中获取 spec
               specification = source.specification(rspec.root.name, spec_version)
 
               # 组件是 subspec
@@ -152,6 +153,7 @@ module Pod
                         ResolverSpecification.new(specification, used_by_only, source)
                       end
               rspec
+              end
             rescue Pod::StandardError => e
               # 没有从新的 source 找到对应版本组件，直接返回原 rspec
               missing_binary_specs << rspec.spec if use_binary

@@ -27,8 +27,7 @@ module Pod
           source = @code ? code_source : binary_source
 
           sets = if @diff
-                   binary_pod_set_names = binary_source.pod_sets.map(&:name)
-                   sets = code_source.pod_sets.reject { |set| binary_pod_set_names.include?(set.name) }
+                   sets = code_source_pod_sets.reject { |set| binary_pod_set_names.include?(set.name) }
                  else
                    source.pod_sets
                 end
@@ -36,6 +35,23 @@ module Pod
           sets.each { |set| UI.pod(set, :name_and_version) }
           UI.puts "\n#{sets.count} pods were found"
         end
+
+        def binary_pod_set_names
+          names = []
+          binary_source.each do |source|
+            names << source.pod_sets.map(&:name)
+          end
+          names
+        end
+
+        def code_source_pod_sets
+          sets = []
+          code_source.each do |source|
+            sets += source.pod_sets
+          end
+          sets
+        end
+
 
         def update_if_necessary!
           if @update
